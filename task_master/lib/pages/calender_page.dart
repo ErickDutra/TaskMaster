@@ -19,7 +19,7 @@ class _CalendarPageStatelessState extends State<CalendarPageStateless> {
   @override
   void initState() {
     super.initState();
-    lerFeriados();
+    lerFeriados();   
     dataHoje = '${today.day} - ${focusedMonth.month}';
   }
 
