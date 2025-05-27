@@ -1,0 +1,67 @@
+[
+  {
+    "nome": "Confraternização Universal",
+    "dia": 1,
+    "mes": 1
+  },
+  {
+    "nome": "Carnaval",
+    "dia": 4,
+    "mes": 3
+  },
+  {
+    "nome": "Quarta-feira de Cinzas",
+    "dia": 5,
+    "mes": 3
+  },
+  {
+    "nome": "Sexta-feira Santa",
+    "dia": 18,
+    "mes": 4
+  },
+  {
+    "nome": "Páscoa",
+    "dia": 20,
+    "mes": 4
+  },
+  {
+    "nome": "Tiradentes",
+    "dia": 21,
+    "mes": 4
+  },
+  {
+    "nome": "Dia do Trabalho",
+    "dia": 1,
+    "mes": 5
+  },
+  {
+    "nome": "Corpus Christi",
+    "dia": 19,
+    "mes": 6
+  },
+  {
+    "nome": "Independência do Brasil",
+    "dia": 7,
+    "mes": 9
+  },
+  {
+    "nome": "Nossa Senhora Aparecida",
+    "dia": 12,
+    "mes": 10
+  },
+  {
+    "nome": "Finados",
+    "dia": 2,
+    "mes": 11
+  },
+  {
+    "nome": "Proclamação da República",
+    "dia": 15,
+    "mes": 11
+  },
+  {
+    "nome": "Natal",
+    "dia": 25,
+    "mes": 12
+  }
+]
