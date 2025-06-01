@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:task_master/components/dialogs/addict_task.dart';
+import 'package:task_master/components/dialogs/addict_tasks.dart';
 
 class CalendarPageStateless extends StatefulWidget {
   const CalendarPageStateless({Key? key}) : super(key: key);

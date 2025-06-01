@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_master/pages/calender_page.dart';
+import 'package:task_master/pages/draw_custom.dart';
+import 'package:task_master/pages/list_tasks.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   
   static final List<Widget> _pages = <Widget>[
-    Center(child: Text('Conteúdo principal')),
+    ListTasksPage(),
     Center(child: Text('Pesquisa')),
     CalendarPageStateless(),
   ];
@@ -48,34 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                // Navegar para a tela inicial
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Configurações'),
-              onTap: () {
-                // Navegar para a tela de configurações
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(),
       bottomNavigationBar: BottomAppBar(
         color: Colors.grey,
 
