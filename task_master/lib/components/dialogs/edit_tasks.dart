@@ -1,21 +1,68 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:task_master/model/task.dart';
 
-class AddTaskDialog extends StatefulWidget {
+class EditTaskDialog extends StatefulWidget {
   final String? dateTask;
 
-  const AddTaskDialog({super.key, this.dateTask});
+  const EditTaskDialog({super.key, this.dateTask});
 
   @override
-  State<AddTaskDialog> createState() => _AddTaskDialogState();
+  State<EditTaskDialog> createState() => _EditTaskDialogState();
 }
-
-class _AddTaskDialogState extends State<AddTaskDialog> {
+class _EditTaskDialogState extends State<EditTaskDialog> {
   final TextEditingController controller = TextEditingController();
   bool notification = false;
-
   TaskPriority _selectedPriority = TaskPriority.medium;
   RepatedMode _selectedRepatedMode = RepatedMode.focusTotal;
+
+  List<Task> _tarefas = [];
+  Task? _tarefaSelecionada;
+
+  @override
+  void initState() {
+    super.initState();
+    carregarTarefas().then((tarefas) {
+      setState(() {
+        _tarefas = tarefas;
+        if (_tarefas.isNotEmpty) {
+          _tarefaSelecionada = _tarefas.first;
+          _preencherCampos(_tarefaSelecionada!);
+        }
+      });
+    });
+  }
+
+  Future<List<Task>> carregarTarefas() async {
+  final String resposta = await rootBundle.loadString('assets/tasks.json');
+  final List<dynamic> dados = json.decode(resposta);
+  return dados.map((item) {
+    return Task(
+      title: item['title'],
+      priority: TaskPriority.values.firstWhere(
+        (e) => e.name == item['priority'],
+        orElse: () => TaskPriority.medium,
+      ),
+      repeatedMode: RepatedMode.values.firstWhere(
+        (e) => e.name == item['repeatedMode'],
+        orElse: () => RepatedMode.focusTotal,
+      ),
+      dateTask: item['dateTask'] != null ? DateTime.parse(item['dateTask']) : null,
+      notification: item['notification'] ?? false,
+      completed: item['completed'] ?? false,
+      hoursNotify: item['hoursNotify'] != null ? DateTime.parse(item['hoursNotify']) : null,
+    );
+  }).toList();
+}
+
+  void _preencherCampos(Task tarefa) {
+    controller.text = tarefa.title;
+    _selectedPriority = tarefa.priority;
+    _selectedRepatedMode = tarefa.repeatedMode;
+    notification = tarefa.notification;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +90,31 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       ),
       content: SizedBox(
         width: 320,
-        height: 290,
+        height: 350,
         child: ListView(
           shrinkWrap: true,
           children: [
+            // Dropdown de seleção de tarefa
+            DropdownButton<Task>(
+              value: _tarefaSelecionada,
+              isExpanded: true,
+              hint: const Text('Selecione uma tarefa'),
+              items: _tarefas.map((Task tarefa) {
+                return DropdownMenuItem<Task>(
+                  value: tarefa,
+                  child: Text(tarefa.title),
+                );
+              }).toList(),
+              onChanged: (Task? novaTarefa) {
+                if (novaTarefa != null) {
+                  setState(() {
+                    _tarefaSelecionada = novaTarefa;
+                    _preencherCampos(novaTarefa);
+                  });
+                }
+              },
+            ),
+            const SizedBox(height: 12),
             TextField(
               controller: controller,
               decoration: const InputDecoration(
@@ -63,42 +131,39 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 ),
                 DropdownButton<TaskPriority>(
                   value: _selectedPriority,
-                  items:
-                      TaskPriority.values.map((TaskPriority priority) {
-                        IconData icon;
-                        Color color;
-                        String label;
-
-                        switch (priority) {
-                          case TaskPriority.high:
-                            icon = Icons.flag;
-                            color = Colors.red;
-                            label = 'Alta';
-                            break;
-                          case TaskPriority.medium:
-                            icon = Icons.flag;
-                            color = Colors.yellow;
-                            label = 'Média';
-                            break;
-                          case TaskPriority.low:
-                          default:
-                            icon = Icons.flag;
-                            color = Colors.blue;
-                            label = 'Baixa';
-                            break;
-                        }
-
-                        return DropdownMenuItem<TaskPriority>(
-                          value: priority,
-                          child: Row(
-                            children: [
-                              Icon(icon, color: color, size: 18),
-                              const SizedBox(width: 8),
-                              Text(label),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                  items: TaskPriority.values.map((TaskPriority priority) {
+                    IconData icon;
+                    Color color;
+                    String label;
+                    switch (priority) {
+                      case TaskPriority.high:
+                        icon = Icons.flag;
+                        color = Colors.red;
+                        label = 'Alta';
+                        break;
+                      case TaskPriority.medium:
+                        icon = Icons.flag;
+                        color = Colors.yellow;
+                        label = 'Média';
+                        break;
+                      case TaskPriority.low:
+                      default:
+                        icon = Icons.flag;
+                        color = Colors.blue;
+                        label = 'Baixa';
+                        break;
+                    }
+                    return DropdownMenuItem<TaskPriority>(
+                      value: priority,
+                      child: Row(
+                        children: [
+                          Icon(icon, color: color, size: 18),
+                          const SizedBox(width: 8),
+                          Text(label),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                   onChanged: (TaskPriority? newValue) {
                     if (newValue != null) {
                       setState(() {
@@ -119,17 +184,16 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   const Divider(color: Colors.white, thickness: 1),
                   DropdownButton<RepatedMode>(
                     value: _selectedRepatedMode,
-                    items:
-                        RepatedMode.values.map((RepatedMode priority) {
-                          return DropdownMenuItem<RepatedMode>(
-                            value: priority,
-                            child: Text(
-                              priority.name == 'focusTotal'
-                                  ? 'Foco Total'
-                                  : priority.name,
-                            ),
-                          );
-                        }).toList(),
+                    items: RepatedMode.values.map((RepatedMode priority) {
+                      return DropdownMenuItem<RepatedMode>(
+                        value: priority,
+                        child: Text(
+                          priority.name == 'focusTotal'
+                              ? 'Foco Total'
+                              : priority.name,
+                        ),
+                      );
+                    }).toList(),
                     onChanged: (RepatedMode? newValue) {
                       if (newValue != null) {
                         setState(() {
@@ -162,10 +226,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                       IconButton(
                         icon: Icon(
                           Icons.notifications,
-                          color:
-                              notification
-                                  ? Colors.yellow
-                                  : const Color.fromARGB(255, 70, 70, 70),
+                          color: notification
+                              ? Colors.yellow
+                              : const Color.fromARGB(255, 70, 70, 70),
                         ),
                         onPressed: () {
                           setState(() {
@@ -196,6 +259,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
             ),
             ElevatedButton(
               onPressed: () {
+                // Aqui você pode salvar as alterações na tarefa selecionada
                 Navigator.of(context).pop(controller.text);
               },
               style: ElevatedButton.styleFrom(

@@ -16,7 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TaskMaster',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black54),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.black,
+          primary: Colors.white,
+          secondary: Colors.grey,
+        ),
       ),
       home: const MyHomePage(title: 'TaskMaster'),
     );
@@ -32,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  
+
   static final List<Widget> _pages = <Widget>[
     ListTasksPage(),
     Center(child: Text('Pesquisa')),
@@ -44,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _selectedIndex = index;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,25 +62,28 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             IconButton(
-               style: IconButton.styleFrom(iconSize: 45,
-              foregroundColor: Colors.black,
+              style: IconButton.styleFrom(
+                iconSize: 45,
+                foregroundColor: Colors.black,
               ),
               icon: const Icon(Icons.home),
-            onPressed: () => _onItemTapped(0),
+              onPressed: () => _onItemTapped(0),
             ),
-            IconButton(
-              style: IconButton.styleFrom(iconSize: 45,
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.green,
-              padding: const EdgeInsets.all(2),
+            if (_selectedIndex ==0)
+              IconButton(
+                style: IconButton.styleFrom(
+                  iconSize: 45,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.green,
+                  padding: const EdgeInsets.all(2),
+                ),
+                icon: const Icon(Icons.check),
+                onPressed: () => _onItemTapped(1),
               ),
-              icon: const Icon(Icons.check),
-            onPressed: () => _onItemTapped(1),
-            ),
             IconButton(
-              
-              style: IconButton.styleFrom(iconSize: 45,
-              foregroundColor: Colors.black,
+              style: IconButton.styleFrom(
+                iconSize: 45,
+                foregroundColor: Colors.black,
               ),
               icon: const Icon(Icons.calendar_today_sharp),
               onPressed: () => _onItemTapped(2),

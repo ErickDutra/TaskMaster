@@ -30,7 +30,6 @@ class CustomDrawer extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                   Divider(color: Colors.black54, thickness: 1),
                 ],
               ),
             )

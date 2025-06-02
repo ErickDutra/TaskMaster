@@ -3,6 +3,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:task_master/components/dialogs/addict_tasks.dart';
+import 'package:task_master/components/dialogs/edit_tasks.dart';
 
 class CalendarPageStateless extends StatefulWidget {
   const CalendarPageStateless({Key? key}) : super(key: key);
@@ -15,12 +16,23 @@ class _CalendarPageStatelessState extends State<CalendarPageStateless> {
   Map<DateTime, List<String>> feriados = {};
   DateTime today = DateTime.now();
   DateTime focusedMonth = DateTime.now();
-  late String dataHoje = today.toString();
+  String dataHoje = '';
+
   @override
   void initState() {
     super.initState();
-    lerFeriados();   
-    dataHoje = '${today.day} - ${focusedMonth.month}';
+    lerFeriados();
+    refreshData(today);
+  }
+
+  Future<void> refreshData(today) async {
+    final String resposta = await rootBundle.loadString('assets/meses.json');
+    final dados = json.decode(resposta);
+    final List<String> listaMeses =
+        (dados['meses'] as List).map((e) => e.toString()).toList();
+    setState(() {
+      dataHoje = '${today.day} - ${listaMeses[today.month - 1]}';
+    });
   }
 
   Future<void> lerFeriados() async {
@@ -66,7 +78,6 @@ class _CalendarPageStatelessState extends State<CalendarPageStateless> {
                   focusedMonth = focused;
                 });
               },
-
               eventLoader: (day) {
                 return feriados[DateTime(day.year, day.month, day.day)] ?? [];
               },
@@ -151,13 +162,7 @@ class _CalendarPageStatelessState extends State<CalendarPageStateless> {
                   today = selectedDay;
                   focusedMonth = focusedDay;
                 });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Data selecionada: ${selectedDay.day}/${selectedDay.month}/${selectedDay.year}',
-                    ),
-                  ),
-                );
+                refreshData(today);
               },
             ),
             Expanded(
@@ -200,19 +205,23 @@ class _CalendarPageStatelessState extends State<CalendarPageStateless> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
+                    
+                      height: 30,
+                      width: 350,
                       padding: const EdgeInsets.symmetric(
                         vertical: 5,
-                        horizontal: 140,
+                        horizontal:
+                            32, // Valor reduzido para evitar quebra de linha
                       ),
                       decoration: BoxDecoration(
                         color: Colors.green,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         dataHoje,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 25,
+                          fontSize: 18,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
@@ -230,7 +239,7 @@ class _CalendarPageStatelessState extends State<CalendarPageStateless> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (context) => AddTaskDialog(dateTask: today),
+                          builder: (context) => AddTaskDialog(dateTask: dataHoje),
                         );
                       },
                       child: const Text(
@@ -248,7 +257,10 @@ class _CalendarPageStatelessState extends State<CalendarPageStateless> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                       showDialog(
+                          context: context,
+                          builder: (context) => EditTaskDialog(dateTask: dataHoje),
+                        );
                       },
                       child: const Text(
                         'Editar Tarefa',

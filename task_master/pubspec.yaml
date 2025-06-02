@@ -64,6 +64,7 @@ flutter:
   assets:
      - assets/feriados.json
      - assets/meses.json
+     - assets/tasks.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

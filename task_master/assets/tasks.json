@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Estudar Flutter",
+    "priority": "high",
+    "repeatedMode": "focusTotal",
+    "dateTask": "2025-06-03T00:00:00.000",
+    "notification": true,
+    "completed": false,
+    "hoursNotify": "2025-06-03T08:00:00.000"
+  },
+  {
+    "title": "Reunião com equipe",
+    "priority": "medium",
+    "repeatedMode": "monday",
+    "dateTask": "2025-06-04T00:00:00.000",
+    "notification": true,
+    "completed": false,
+    "hoursNotify": "2025-06-04T10:30:00.000"
+  },
+  {
+    "title": "Ir ao mercado",
+    "priority": "low",
+    "repeatedMode": "saturday",
+    "dateTask": "2025-06-07T00:00:00.000",
+    "notification": false,
+    "completed": false,
+    "hoursNotify": null
+  },
+  {
+    "title": "Academia",
+    "priority": "medium",
+    "repeatedMode": "tuesday",
+    "dateTask": "2025-06-10T00:00:00.000",
+    "notification": true,
+    "completed": true,
+    "hoursNotify": "2025-06-10T18:00:00.000"
+  },
+  {
+    "title": "Enviar relatório",
+    "priority": "high",
+    "repeatedMode": "friday",
+    "dateTask": "2025-06-06T00:00:00.000",
+    "notification": true,
+    "completed": false,
+    "hoursNotify": "2025-06-06T09:00:00.000"
+  }
+]
