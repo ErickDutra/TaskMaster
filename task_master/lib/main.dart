@@ -2,15 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:task_master/pages/calender_page.dart';
 import 'package:task_master/pages/draw_custom.dart';
 import 'package:task_master/pages/list_tasks.dart';
+import 'package:task_master/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _logado = false;
+
+  void _login() {
+    setState(() {
+      _logado = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +35,16 @@ class MyApp extends StatelessWidget {
           secondary: Colors.grey,
         ),
       ),
-      home: const MyHomePage(title: 'TaskMaster'),
+      // home: _logado
+      //     ? MyHomePage(title: 'TaskMaster')
+      //     : LoginPage(onLogin: _login),
+      initialRoute: _logado ? '/home' : '/login',
+      routes: {
+    '/login': (context) => LoginPage(onLogin: _login),
+    '/home': (context) => MyHomePage(title: 'TaskMaster'),
+    '/calendar': (context) => CalendarPageStateless(),
+    '/tasks': (context) => ListTasksPage(),
+  },
     );
   }
 }

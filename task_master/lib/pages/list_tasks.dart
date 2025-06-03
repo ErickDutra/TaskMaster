@@ -73,8 +73,7 @@ class _ListTasksPageState extends State<ListTasksPage> {
               ),
             );
           }
-
-          // Agrupa as tarefas por data
+          
           final Map<String, List<Task>> tarefasPorData = {};
           for (var task in snapshot.data!) {
             if (task.dateTask != null) {
