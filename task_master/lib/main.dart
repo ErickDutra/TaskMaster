@@ -35,9 +35,9 @@ class _MyAppState extends State<MyApp> {
           secondary: Colors.grey,
         ),
       ),
-      // home: _logado
-      //     ? MyHomePage(title: 'TaskMaster')
-      //     : LoginPage(onLogin: _login),
+      home: _logado
+          ? MyHomePage(title: 'TaskMaster')
+          : LoginPage(onLogin: _login),
       initialRoute: _logado ? '/home' : '/login',
       routes: {
     '/login': (context) => LoginPage(onLogin: _login),
